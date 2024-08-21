@@ -24,4 +24,21 @@ EXCEPTION
       DBMS_OUTPUT.PUT_LINE('O animal não está mais no Zoológico, ou não existe!');
 END;
 
---
+-- IF ELSEIF, %TYPE
+DECLARE
+    v_idade pessoa.idade%TYPE;
+    v_nome pessoa.nome%TYPE;
+BEGIN
+    SELECT idade, nome
+    INTO v_idade, v_nome
+    FROM pessoa
+    WHERE cpf = '01111111111';  -- Altere o CPF conforme necessário
+
+    IF v_idade < 18 THEN
+        DBMS_OUTPUT.PUT_LINE(v_nome || ' é um menor de idade.');
+    ELSIF v_idade BETWEEN 18 AND 65 THEN
+        DBMS_OUTPUT.PUT_LINE(v_nome || ' é um adulto.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE(v_nome || ' é um idoso.');
+    END IF;
+END;
