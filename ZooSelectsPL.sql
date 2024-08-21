@@ -131,4 +131,54 @@ BEGIN
 END;
 /
 
---
+-- CREATE OR REPLACE PACKAGE, CREATE OR REPLACE PACKAGE BODY, WHILE LOOP
+CREATE OR REPLACE PACKAGE pkg_idade IS 
+    TYPE tbl_idade IS TABLE OF VARCHAR2(50) INDEX BY VARCHAR(11); 
+    PROCEDURE verifica_idade (tabela OUT tbl_idade); 
+    PROCEDURE print_verificacao (tabela IN tbl_idade); 
+    PROCEDURE executa; 
+END pkg_idade; 
+/
+
+CREATE OR REPLACE PACKAGE BODY pkg_idade IS 
+    PROCEDURE verifica_idade(tabela OUT tbl_idade) IS 
+        CURSOR cur_idade IS SELECT cpf, idade FROM pessoa; 
+    BEGIN 
+        FOR linha IN cur_idade LOOP 
+            IF linha.idade < 32 THEN 
+                tabela(linha.cpf) := 'Caramba! Você é mais velho que o Kakashi!.'; 
+            ELSIF linha.idade > 32 THEN 
+                tabela(linha.cpf) := 'Você é mais novo que o Sensei Kakashi Hatake.'; 
+            ELSE 
+                tabela(linha.cpf) := 'Suspeito que você seja o Kakashi Sensei.'; 
+            END IF; 
+        END LOOP; 
+    END verifica_idade; 
+ 
+    PROCEDURE print_verificacao(tabela IN tbl_idade)  
+        IS idx VARCHAR2(11); 
+    BEGIN 
+        idx := tabela.FIRST; 
+            WHILE idx IS NOT NULL LOOP 
+            DBMS_OUTPUT.PUT_LINE ('CPF: ' || idx || ' Verificacao: ' || tabela(idx)); 
+            idx := tabela.NEXT(idx); 
+                END LOOP; 
+    END print_verificacao; 
+ 
+    PROCEDURE executa IS tabela tbl_idade; 
+        BEGIN 
+            verifica_idade(tabela); 
+            print_verificacao(tabela); 
+        END executa; 
+END pkg_idade;
+/
+
+BEGIN
+    DBMS_OUTPUT.DISABLE;
+    DBMS_OUTPUT.ENABLE(10000);
+END;
+/
+BEGIN
+    pkg_idade.executa;
+END;
+/
