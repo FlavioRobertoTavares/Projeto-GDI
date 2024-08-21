@@ -65,6 +65,7 @@ CREATE TABLE funcionario(
     data_contratacao date,
     email VARCHAR2(50),
     fone VARCHAR(13),
+    salario DECIMAL(8, 3),
     CONSTRAINT funcionario_pk PRIMARY KEY (cpf_funcionario),
     CONSTRAINT cpf_funcionario_fk FOREIGN KEY (cpf_funcionario) REFERENCES pessoa (cpf),
     CONSTRAINT cpf_gerente_funcionario_fk FOREIGN KEY (cpf_gerente) REFERENCES funcionario(cpf_funcionario)

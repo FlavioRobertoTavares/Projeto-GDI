@@ -98,22 +98,3 @@ FROM data_visitas
 GROUP BY cpf_visitante_dv
 ORDER BY cpf_visitante_dv ASC;
 
--- SELECT * FROM animal;
-
--- SELECT * FROM habitat;
-
--- SELECT * FROM exibicao;
-
--- SELECT * FROM visitante;
-
--- SELECT * FROM funcionario;
-
--- SELECT * FROM visitante_habitat;
-
--- SELECT * FROM data_visitas;
-
--- SELECT * FROM review;
-
--- SELECT * FROM pessoa;
-
--- SELECT * FROM atribuido;

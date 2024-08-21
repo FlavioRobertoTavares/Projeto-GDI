@@ -65,6 +65,7 @@ CREATE TABLE funcionario(
     data_contratacao date,
     email VARCHAR2(50),
     fone VARCHAR(13),
+    salario DECIMAL(8, 3),
     CONSTRAINT funcionario_pk PRIMARY KEY (cpf_funcionario),
     CONSTRAINT cpf_funcionario_fk FOREIGN KEY (cpf_funcionario) REFERENCES pessoa (cpf),
     CONSTRAINT cpf_gerente_funcionario_fk FOREIGN KEY (cpf_gerente) REFERENCES funcionario(cpf_funcionario)
@@ -240,26 +241,26 @@ VALUES ('05555555555', 'caguedes@cin.ufpe.br', '5581925545639');
 
 --INSERINDO FUNCIONARIO
 
-INSERT INTO funcionario (cpf_funcionario, cargo, data_contratacao, email, fone)
-VALUES ('12222222222', 'Gerente Geral', TO_DATE('1999-08-19', 'YYYY-MM-DD'), 'kks@cin.ufpe.br', '5581912345678');
+INSERT INTO funcionario (cpf_funcionario, cargo, data_contratacao, email, fone, salario)
+VALUES ('12222222222', 'Gerente Geral', TO_DATE('1999-08-19', 'YYYY-MM-DD'), 'kks@cin.ufpe.br', '5581912345678', 15000.000);
 
-INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, email, fone)
-VALUES ('07777777777', '12222222222', 'Cuidador do Leao', TO_DATE('2024-08-19', 'YYYY-MM-DD'), 'frtb@cin.ufpe.br', '558123568451');
+INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, email, fone, salario)
+VALUES ('07777777777', '12222222222', 'Cuidador do Leao', TO_DATE('2024-08-19', 'YYYY-MM-DD'), 'frtb@cin.ufpe.br', '558123568451', 5000.000);
 
-INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, email, fone)
-VALUES ('08888888888', '12222222222', 'Cuidador do Hipopotamo', TO_DATE('2022-08-19', 'YYYY-MM-DD'), 'nuz@cin.ufpe.br', '5581912653247');
+INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, email, fone, salario)
+VALUES ('08888888888', '12222222222', 'Cuidador do Hipopotamo', TO_DATE('2022-08-19', 'YYYY-MM-DD'), 'nuz@cin.ufpe.br', '5581912653247', 8000.000);
 
-INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, email, fone)
-VALUES ('09999999999', '12222222222', 'Cuidador do Pinguim', TO_DATE('2021-09-18', 'YYYY-MM-DD'), 'ssu@cin.ufpe.br', '5581978652341');
+INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, email, fone, salario)
+VALUES ('09999999999', '12222222222', 'Cuidador do Pinguim', TO_DATE('2021-09-18', 'YYYY-MM-DD'), 'ssu@cin.ufpe.br', '5581978652341', 2000.000);
 
-INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, email, fone)
-VALUES ('11111111111', '12222222222', 'Cuidador do Mamute', TO_DATE('2023-01-14', 'YYYY-MM-DD'), 'skh@cin.ufpe.br', '5581997453201');
+INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, email, fone, salario)
+VALUES ('11111111111', '12222222222', 'Cuidador do Mamute', TO_DATE('2023-01-14', 'YYYY-MM-DD'), 'skh@cin.ufpe.br', '5581997453201', 50000.000);
 
-INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, email, fone)
-VALUES ('13333333333', '12222222222', 'Cuidador da Preguica', TO_DATE('2020-09-09', 'YYYY-MM-DD'), 'rkl@cin.ufpe.br', '5581973916428');
+INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, email, fone, salario)
+VALUES ('13333333333', '12222222222', 'Cuidador da Preguica', TO_DATE('2020-09-09', 'YYYY-MM-DD'), 'rkl@cin.ufpe.br', '5581973916428', 100.000);
 
-INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, email, fone)
-VALUES ('14444444444', '12222222222', 'Cuidador da Raposa', TO_DATE('2019-11-13', 'YYYY-MM-DD'), 'lo@cin.ufpe.br', '558194967585');
+INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, email, fone, salario)
+VALUES ('14444444444', '12222222222', 'Cuidador da Raposa', TO_DATE('2019-11-13', 'YYYY-MM-DD'), 'lo@cin.ufpe.br', '558194967585', 35000.000);
 
 --INSERINDO VISITANTE_HABITAT
 INSERT INTO visitante_habitat (cpf_visitante_vh, id_habitat_vh, data_visita)
