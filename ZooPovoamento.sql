@@ -143,6 +143,7 @@ INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, 
 VALUES ('14444444444', '12222222222', 'Cuidador da Raposa', TO_DATE('2019-11-13', 'YYYY-MM-DD'), 'lo@cin.ufpe.br', '558194967585', 35000.000);
 
 --INSERINDO VISITANTE_HABITAT
+
 INSERT INTO visitante_habitat (cpf_visitante_vh, id_habitat_vh, data_visita)
 VALUES ('01111111111', 1, TO_DATE('2012-02-19', 'YYYY-MM-DD'));
 
@@ -157,6 +158,24 @@ VALUES ('04444444444', 4, TO_DATE('2020-05-29', 'YYYY-MM-DD'));
 
 INSERT INTO visitante_habitat (cpf_visitante_vh, id_habitat_vh, data_visita)
 VALUES ('05555555555', 6, TO_DATE('2024-08-19', 'YYYY-MM-DD'));
+
+INSERT INTO visitante_habitat (cpf_visitante_vh, id_habitat_vh, data_visita)
+VALUES ('02222222222', 3, TO_DATE('2022-11-09', 'YYYY-MM-DD'));
+
+INSERT INTO visitante_habitat (cpf_visitante_vh, id_habitat_vh, data_visita)
+VALUES ('04444444444', 3, TO_DATE('2018-11-09', 'YYYY-MM-DD'));
+
+INSERT INTO visitante_habitat (cpf_visitante_vh, id_habitat_vh, data_visita)
+VALUES ('03333333333', 3, TO_DATE('2019-07-09', 'YYYY-MM-DD'));
+
+INSERT INTO visitante_habitat (cpf_visitante_vh, id_habitat_vh, data_visita)
+VALUES ('01111111111', 1, TO_DATE('2012-02-20', 'YYYY-MM-DD'));
+
+INSERT INTO visitante_habitat (cpf_visitante_vh, id_habitat_vh, data_visita)
+VALUES ('05555555555', 1, TO_DATE('2012-02-20', 'YYYY-MM-DD'));
+
+INSERT INTO visitante_habitat (cpf_visitante_vh, id_habitat_vh, data_visita)
+VALUES ('02222222222', 2, TO_DATE('2024-08-19', 'YYYY-MM-DD'));
 
 --INSERINDO DATA_VISITAS
 

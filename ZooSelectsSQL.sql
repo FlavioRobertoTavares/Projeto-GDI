@@ -98,3 +98,10 @@ FROM data_visitas
 GROUP BY cpf_visitante_dv
 ORDER BY cpf_visitante_dv ASC;
 
+-- HAVING: Consulta que nos retorna o nome dos habitats e o número de visitas que eles tiveram, caso tenham sido visitados pelo menos 4 vezes
+SELECT h.nome AS habitat_nome, COUNT(vh.cpf_visitante_vh) AS total_visitantes
+FROM habitat h
+JOIN visitante_habitat vh ON h.id = vh.id_habitat_vh
+GROUP BY h.nome
+HAVING COUNT(vh.cpf_visitante_vh) > 3
+ORDER BY total_visitantes DESC;
