@@ -117,7 +117,7 @@ FROM habitat h
 JOIN atribuido a ON h.id = a.id_habitat
 GROUP BY h.nome;
 
--- CREATE VIEW: Cria uma tabela virtual dos candidatos a gerência no futuro, baseado na sua idade e salário 
+-- CREATE VIEW: Cria uma tabela virtual dos candidatos a gerência no futuro, baseado na sua idade e salário, onde eles tem que ter pelo menos 19 anos e ganhar mais de 5 mil reais
 CREATE VIEW Candidatos_a_gerência AS
 SELECT f.cpf_funcionario AS CPF, f.email AS Email, f.fone AS Telefone, f.salario AS Salario, p.nome AS Nome,f.cargo AS Cargo_Atual
 FROM funcionario f
