@@ -105,3 +105,23 @@ JOIN visitante_habitat vh ON h.id = vh.id_habitat_vh
 GROUP BY h.nome
 HAVING COUNT(vh.cpf_visitante_vh) > 3
 ORDER BY total_visitantes DESC;
+
+-- UNION: Consulta quantos visitantes cada habitat teve, então consulta quantos funcionarios estão atribuidos a cada habitat, então une as duas consultas em uma.
+SELECT 'Visitantes' AS categoria, h.nome AS habitat, COUNT(vh.cpf_visitante_vh) AS total
+FROM habitat h
+JOIN visitante_habitat vh ON h.id = vh.id_habitat_vh
+GROUP BY h.nome
+UNION
+SELECT 'Funcionários' AS categoria, h.nome AS habitat, COUNT(a.cpf_funcionario_att) AS total
+FROM habitat h
+JOIN atribuido a ON h.id = a.id_habitat
+GROUP BY h.nome;
+
+-- CREATE VIEW: Cria uma tabela virtual dos candidatos a gerência no futuro, baseado na sua idade e salário 
+CREATE VIEW Candidatos_a_gerência AS
+SELECT f.cpf_funcionario AS CPF, f.email AS Email, f.fone AS Telefone, f.salario AS Salario, p.nome AS Nome,f.cargo AS Cargo_Atual
+FROM funcionario f
+JOIN pessoa p ON f.cpf_funcionario = p.cpf
+WHERE p.idade >= 19
+AND f.salario > 5000;
+SELECT * FROM Candidatos_a_gerência;
