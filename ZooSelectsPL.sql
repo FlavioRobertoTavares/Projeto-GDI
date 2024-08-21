@@ -117,6 +117,22 @@ END;
     
 EXEC mostrar_exibicoes;
 
+-- ESTRUTURA DE DADOS DO TIPO TABLE
+DECLARE
+    TYPE FuncionarioInfo IS TABLE OF VARCHAR2(50) INDEX BY PLS_INTEGER;
+    funcionarios FuncionarioInfo;
+
+BEGIN
+    funcionarios(1) := 'Nome: João, Idade: 30';
+    funcionarios(2) := 'Nome: Maria, Idade: 25';
+    funcionarios(3) := 'Nome: Pedro, Idade: 40';
+
+    FOR i IN funcionarios.FIRST .. funcionarios.LAST LOOP
+        DBMS_OUTPUT.PUT_LINE('Funcionário ' || i || ': ' || funcionarios(i));
+    END LOOP;
+END;
+/
+
 -- FOR IN LOOP
 DECLARE
     CURSOR c_animais IS
@@ -180,5 +196,46 @@ END;
 /
 BEGIN
     pkg_idade.executa;
+END;
+/
+
+-- CREATE FUNCTION
+CREATE OR REPLACE FUNCTION Funcionario_Salario_Maximo
+RETURN VARCHAR2 IS
+    v_cpf_funcionario VARCHAR2(11);
+BEGIN
+    SELECT cpf_funcionario
+    INTO v_cpf_funcionario
+    FROM funcionario
+    WHERE salario = (SELECT MAX(salario) FROM funcionario);
+
+    RETURN v_cpf_funcionario;
+END Funcionario_Salario_Maximo;
+/
+
+DECLARE
+    v_funcionario_rico funcionario.cpf_funcionario%TYPE := Funcionario_Salario_Maximo;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('O cpf do funcionario mais burgues eh o '|| v_funcionario_rico);
+END;
+/
+
+-- CASE WHEN:
+DECLARE
+    CURSOR c_funcionarios IS
+        SELECT p.nome, f.salario
+        FROM funcionario f
+        JOIN pessoa p ON f.cpf_funcionario = p.cpf;
+    v_tipo_salario VARCHAR2(10);
+BEGIN
+    FOR rec IN c_funcionarios LOOP
+        v_tipo_salario := CASE 
+                            WHEN rec.salario < 3000 THEN 'Baixo'
+                            WHEN rec.salario BETWEEN 3000 AND 7000 THEN 'Médio'
+                            ELSE 'Alto'
+                          END;
+
+        DBMS_OUTPUT.PUT_LINE('Nome: ' || rec.nome || ' - Salário: ' || rec.salario || ' - Tipo de Salário: ' || v_tipo_salario);
+    END LOOP;
 END;
 /
