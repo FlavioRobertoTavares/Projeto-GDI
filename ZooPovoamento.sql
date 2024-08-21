@@ -122,7 +122,7 @@ VALUES ('05555555555', 'caguedes@cin.ufpe.br', '5581925545639');
 --INSERINDO FUNCIONARIO
 
 INSERT INTO funcionario (cpf_funcionario, cargo, data_contratacao, email, fone)
-VALUES ('12222222222', 'gerente geral', TO_DATE('1999-08-19', 'YYYY-MM-DD'), 'kks@cin.ufpe.br', '5581912345678');
+VALUES ('12222222222', 'Gerente Geral', TO_DATE('1999-08-19', 'YYYY-MM-DD'), 'kks@cin.ufpe.br', '5581912345678');
 
 INSERT INTO funcionario (cpf_funcionario, cpf_gerente, cargo, data_contratacao, email, fone)
 VALUES ('07777777777', '12222222222', 'Cuidador do Leao', TO_DATE('2024-08-19', 'YYYY-MM-DD'), 'frtb@cin.ufpe.br', '558123568451');
