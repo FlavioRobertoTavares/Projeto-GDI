@@ -32,7 +32,7 @@ BEGIN
     SELECT idade, nome
     INTO v_idade, v_nome
     FROM pessoa
-    WHERE cpf = '01111111111';  -- Altere o CPF conforme necessário
+    WHERE cpf = '01111111111'; 
 
     IF v_idade < 18 THEN
         DBMS_OUTPUT.PUT_LINE(v_nome || ' é um menor de idade.');
@@ -41,4 +41,12 @@ BEGIN
     ELSE
         DBMS_OUTPUT.PUT_LINE(v_nome || ' é um idoso.');
     END IF;
+END;
+
+-- CREATE OR REPLACE TRIGGER (LINHA)
+CREATE OR REPLACE TRIGGER trigger_idade BEFORE INSERT OR UPDATE ON pessoa
+FOR EACH ROW
+WHEN (NEW.idade < 0)
+BEGIN
+    RAISE_APPLICATION_ERROR(-20002, 'IDADE MENOR QUE ZERO NÃO PERMITIDA.');
 END;
