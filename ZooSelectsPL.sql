@@ -23,6 +23,7 @@ EXCEPTION
    WHEN NO_DATA_FOUND THEN
       DBMS_OUTPUT.PUT_LINE('O animal não está mais no Zoológico, ou não existe!');
 END;
+/
 
 -- IF ELSEIF, %TYPE
 DECLARE
@@ -42,6 +43,7 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE(v_nome || ' é um idoso.');
     END IF;
 END;
+/
 
 -- RECORD
 DECLARE
@@ -66,6 +68,7 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Espécie: ' || v_animal.especie);
     DBMS_OUTPUT.PUT_LINE('Origem: ' || v_animal.origem);
 END;
+/
 
 -- CREATE OR REPLACE TRIGGER (LINHA)
 CREATE OR REPLACE TRIGGER trigger_idade BEFORE INSERT OR UPDATE ON pessoa
@@ -74,9 +77,58 @@ WHEN (NEW.idade < 0)
 BEGIN
     RAISE_APPLICATION_ERROR(-20002, 'IDADE MENOR QUE ZERO NÃO PERMITIDA.');
 END;
+/
+
+INSERT INTO pessoa (cpf, nome, sexo, idade)
+VALUES ('15555555555', 'rODRIGAO', 'M', -20);
 
 -- CREATE OR REPLACE TRIGGER (COMANDO)
 CREATE OR REPLACE TRIGGER update_habitat
 AFTER UPDATE ON atribuido BEGIN
     DBMS_OUTPUT.PUT_LINE('As definições de habitat foram atualizadas');
 END;
+/
+
+UPDATE atribuido SET id_habitat = 2 WHERE id_animal = 1;
+
+-- CREATE PROCEDURE, LOOP EXIT WHEN, CURSOR (OPEN FETCH CLOSE)
+CREATE OR REPLACE PROCEDURE mostrar_exibicoes AS
+    v_habitat exibicao.id_habitat%TYPE;
+    v_nome exibicao.nome%TYPE;
+
+    CURSOR c_exibicao IS 
+    SELECT id_habitat, nome 
+    FROM exibicao;
+
+BEGIN
+    OPEN c_exibicao;
+    LOOP
+
+    FETCH c_exibicao INTO v_habitat, v_nome;
+
+    EXIT WHEN c_exibicao%NOTFOUND;
+    DBMS_OUTPUT.PUT_LINE('ID DO HABITAT: ' || v_habitat || ', NOME DA EXIBIÇÃO: ' || v_nome);
+    END LOOP;
+
+    CLOSE c_exibicao;
+    DBMS_OUTPUT.PUT_LINE('operacao concluída');
+END;
+/
+    
+EXEC mostrar_exibicoes;
+
+-- FOR IN LOOP
+DECLARE
+    CURSOR c_animais IS
+        SELECT a.nome AS animal_nome, h.nome AS habitat_nome
+        FROM animal a
+        JOIN atribuido att ON a.id = att.id_animal
+        JOIN habitat h ON att.id_habitat = h.id;
+BEGIN
+    FOR r_animal IN c_animais LOOP
+        DBMS_OUTPUT.PUT_LINE('Animal: ' || r_animal.animal_nome || ' - Habitat: ' || r_animal.habitat_nome);
+    END LOOP;
+END;
+/
+
+--
