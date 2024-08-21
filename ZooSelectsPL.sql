@@ -43,10 +43,40 @@ BEGIN
     END IF;
 END;
 
+-- RECORD
+DECLARE
+    TYPE animal_record IS RECORD (
+        id         animal.id%TYPE,
+        nome       animal.nome%TYPE,
+        especie    animal.especie%TYPE,
+        nascimento animal.nascimento%TYPE,
+        sexo       animal.sexo%TYPE,
+        origem     animal.origem%TYPE,
+        descricao  animal.descricao%TYPE
+    );
+
+    v_animal animal_record;
+BEGIN
+    SELECT id, nome, especie, nascimento, sexo, origem, descricao
+    INTO v_animal
+    FROM animal
+    WHERE id = 1;  -- Altere o ID conforme necessário
+
+    DBMS_OUTPUT.PUT_LINE('Nome: ' || v_animal.nome);
+    DBMS_OUTPUT.PUT_LINE('Espécie: ' || v_animal.especie);
+    DBMS_OUTPUT.PUT_LINE('Origem: ' || v_animal.origem);
+END;
+
 -- CREATE OR REPLACE TRIGGER (LINHA)
 CREATE OR REPLACE TRIGGER trigger_idade BEFORE INSERT OR UPDATE ON pessoa
 FOR EACH ROW
 WHEN (NEW.idade < 0)
 BEGIN
     RAISE_APPLICATION_ERROR(-20002, 'IDADE MENOR QUE ZERO NÃO PERMITIDA.');
+END;
+
+-- CREATE OR REPLACE TRIGGER (COMANDO)
+CREATE OR REPLACE TRIGGER update_habitat
+AFTER UPDATE ON atribuido BEGIN
+    DBMS_OUTPUT.PUT_LINE('As definições de habitat foram atualizadas');
 END;
