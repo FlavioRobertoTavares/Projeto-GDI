@@ -17,11 +17,18 @@ CREATE OR REPLACE TYPE tp_funcionario UNDER tp_pessoa(
 );
 
 -- #TABLES
-CREATE TABLE tb_funcionarios OF tp_funcionario;
+CREATE TABLE tb_funcionarios OF tp_funcionario (
+    PRIMARY KEY (cpf),
+    CONSTRAINT fk_gerente
+    FOREIGN KEY (cpf_gerente)
+    REFERENCES tb_funcionarios(cpf)
+);
 
 -- #TESTES 
+INSERT INTO tb_funcionarios (cpf, nome, sexo, idade, cargo, data_contratacao, email, fone, salario)
+VALUES ('98765432100', 'Qinqyi', 'F', 375, 'Policial gerente', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com', '5551999887766', 1000.000);
 
-INSERT INTO tb_funcionarios
+INSERT INTO tb_funcionarios (cpf, nome, sexo, idade, cpf_gerente, cargo, data_contratacao, email, fone, salario)
 VALUES ('12345678901', 'Jane Doe', 'F', 29, '98765432100', 'Policial infiltrado', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com', '5551999887766', 5500.000);
 
 SELECT * FROM tb_funcionarios;
