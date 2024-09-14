@@ -133,7 +133,7 @@ CREATE TABLE tb_review OF tp_review(
 );
 /
 
--- #TESTES 
+-- #EXEMPLOS:
 INSERT INTO tb_animal (id, nome, especie, nascimento, sexo, origem, descrico)
 VALUES (1,'Simba', 'Leão', TO_DATE('2003-03-28', 'YYYY-MM-DD'), 'M', 'Tanzania', 'Grande felino de pelagem dourada e uma juba espessa.');
 /
@@ -149,6 +149,22 @@ VALUES ('98765432100', 'Qinqyi', 'F', 375, 'Policial gerente', TO_DATE('2022-01-
 INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fone, salario, atribuicoes)
 VALUES ('12345678901', 'Jane Doe', 'F', 29, (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '98765432100'), 'Policial infiltrado', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com', '5551999887766', 5500.000, 
 tp_nt_atribuicoes(tp_atribuicoes((SELECT REF(A) FROM tb_animal A WHERE A.id = '1'), (SELECT REF(H) from tb_habitat H WHERE H.id = '1'))));
+/
+
+INSERT INTO tb_visitante (cpf, nome, sexo, idade, data_vsitas, email, fone)
+VALUES ('12345678901', 'Jane Doe', 'F', 29, tp_nt_data_visitas(tp_data_visitas(TO_DATE('2003-03-28', 'YYYY-MM-DD'))), 'ex@john.doe', '5551999887766');
+/
+
+INSERT INTO tb_exibicao (id, nome, descricao, data_exib, habitat)
+VALUES ('1', 'NOME EXIB', 'DESCRICAO', tp_data_exibicao(TO_DATE('2001-03-28', 'YYYY-MM-DD'), TO_DATE('2001-03-28', 'YYYY-MM-DD')), '1');
+/
+
+INSERT INTO tb_visita (visitante, habitat, data_visita)
+VALUES ('12345678901', '1', TO_DATE('2001-03-28', 'YYYY-MM-DD'));
+/
+
+INSERT INTO tb_review (id, nota, visita)
+VALUES (1, 9, (SELECT REF(V) FROM tb_visita V WHERE V.visitante = '12345678901' AND V.habitat = '1' AND V.data_visita = TO_DATE('2003-03-28', 'YYYY-MM-DD')));
 /
 
 --CHECKLIST: https://www.canva.com/design/DAGQfZ2PP0M/jqMwQeHYPOw7CGDfxiWHmg/edit?ui=eyJEIjp7IkoiOnsiQiI6eyJBPyI6IkIifX19LCJBIjp7IkEiOiJkb3dubG9hZF9wbmciLCJGIjp0cnVlfSwiRyI6eyJEIjp7IkQiOnsiQT8iOiJBIiwiQSI6IkIifX19fQ
