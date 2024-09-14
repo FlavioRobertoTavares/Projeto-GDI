@@ -64,8 +64,8 @@ CREATE OR REPLACE TYPE tp_visitante UNDER tp_pessoa(
 /
 
 CREATE OR REPLACE TYPE tp_visita AS OBJECT(
-    visitante REF tp_visitante,
-    habitat REF tp_habitat,
+    visitante VARCHAR2(11),
+    habitat NUMBER,
     data_visita DATE
 );
 /
@@ -74,7 +74,8 @@ CREATE OR REPLACE TYPE tp_review AS OBJECT (
     id NUMBER,
     nota NUMBER,
     visita REF tp_visita
-);/
+);
+/
 
 CREATE OR REPLACE TYPE tp_data_exibicao as OBJECT(
   data_inicio DATE,
@@ -87,7 +88,7 @@ CREATE OR REPLACE TYPE tp_exibicao AS OBJECT (
     nome VARCHAR2(50),
     descricao VARCHAR2(280),
     data_exib tp_data_exibicao,
-    habitat REF tp_habitat
+    habitat NUMBER
 );
 /
 
@@ -114,24 +115,23 @@ CREATE TABLE tb_habitat OF tp_habitat(
 /
 
 CREATE TABLE tb_exibicao OF tp_exibicao(
-    PRIMARY KEY (habitat, data_exib),
-    habitat WITH ROWID REFERENCES tb_habitat
+    PRIMARY KEY (habitat, data_exib.data_inicio),
+    CONSTRAINT fk_habitat FOREIGN KEY (habitat) REFERENCES tb_habitat(id)
 );
 /
-
+   
 CREATE TABLE tb_visita OF tp_visita(
-    PRIMARY KEY (visitante, habitat, data_visita)
-    habitat WITH ROWID REFERENCES tb_habitat
-    visitante WITH ROWID REFERENCES tb_visitante
+    PRIMARY KEY (visitante, habitat, data_visita),
+    CONSTRAINT fk_habitat_v FOREIGN KEY (habitat) REFERENCES tb_habitat(id),
+    CONSTRAINT fk_visitante_v FOREIGN KEY (visitante) REFERENCES tb_visitante(cpf)
 );
 /
 
 CREATE TABLE tb_review OF tp_review(
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
     visita WITH ROWID REFERENCES tb_visita
 );
 /
-
 
 -- #TESTES 
 INSERT INTO tb_funcionario (cpf, nome, sexo, idade, cargo, data_contratacao, email, fone, salario)
@@ -176,7 +176,6 @@ SELECT
     salario
 FROM 
     tb_funcionario;
-
 /
 
 SELECT * FROM tb_visitante;
