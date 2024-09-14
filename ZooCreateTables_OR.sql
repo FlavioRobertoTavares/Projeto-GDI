@@ -14,7 +14,7 @@ CREATE OR REPLACE TYPE tp_animal AS OBJECT (
     nascimento DATE,
     sexo VARCHAR2(1),
     origem VARCHAR2(30),
-    descrico VARCHAR2(280)
+    descricao VARCHAR2(280)
 );
 /
 
@@ -134,54 +134,21 @@ CREATE TABLE tb_review OF tp_review(
 /
 
 -- #TESTES 
+INSERT INTO tb_animal (id, nome, especie, nascimento, sexo, origem, descrico)
+VALUES (1,'Simba', 'Leão', TO_DATE('2003-03-28', 'YYYY-MM-DD'), 'M', 'Tanzania', 'Grande felino de pelagem dourada e uma juba espessa.');
+/
+
+INSERT INTO tb_habitat(id, tipo, localizacao, nome, descricao)
+VALUES (1, 'Semi-desertico', 'Sul', 'Savana', 'Habitat legal');
+/
+
 INSERT INTO tb_funcionario (cpf, nome, sexo, idade, cargo, data_contratacao, email, fone, salario)
 VALUES ('98765432100', 'Qinqyi', 'F', 375, 'Policial gerente', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com', '5551999887766', 1000.000);
 /
-
-INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fone, salario)
-VALUES ('12345678901', 'Jane Doe', 'F', 29, (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '98765432100'), 'Policial infiltrado', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com', '5551999887766', 5500.000);
-/
-INSERT INTO tb_visitante (cpf, nome, sexo, idade, data_vsitas, email, fone)
-VALUES (
-    '11122233344',  
-    'John Doe',     
-    'M',            
-    30,             
-    tp_nt_data_visitas(
-        tp_data_visitas(TO_DATE('2024-09-01', 'YYYY-MM-DD')),
-        tp_data_visitas(TO_DATE('2024-09-15', 'YYYY-MM-DD'))
-    ),  -- Tá pegando, mas tem que visualizar do jeito certo na proxima entrega
-    'john.doe@example.com',  
-    '5551234567'            
-);
-/
-
-INSERT INTO tb_animal (id, nome, especie, nascimento, sexo, origem, descricao)
-VALUES (1, 'Ben Bigger', 'Urso Pardo', TO_DATE('12/09/2024', 'dd/mm/yyyy'), 'M', 'Belobog', 'Urso irado que quebra pedra.');
-/
-
-INSERT INTO tb_habitat (id, tipo, localizacao, nome, descricao )
-VALUES (1, 'Metalúrgica', 'Belobog', 'Usinas Pesadas de Belobog', 'Usina Metalúrgica de grande influência.')
     
-SELECT 
-    cpf,
-    nome,
-    sexo,
-    idade,
-    DEREF(gerente).cpf AS gerente_cpf,
-    cargo,
-    data_contratacao,
-    email,
-    fone,
-    salario
-FROM 
-    tb_funcionario;
+INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fone, salario, atribuicoes)
+VALUES ('12345678901', 'Jane Doe', 'F', 29, (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '98765432100'), 'Policial infiltrado', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com', '5551999887766', 5500.000, 
+tp_nt_atribuicoes(tp_atribuicoes((SELECT REF(A) FROM tb_animal A WHERE A.id = '1'), (SELECT REF(H) from tb_habitat H WHERE H.id = '1'))));
 /
-
-SELECT * FROM tb_visitante;
-
-SELECT * from tb_animal;
-
-SELECT * FROM tb_habitat;
 
 --CHECKLIST: https://www.canva.com/design/DAGQfZ2PP0M/jqMwQeHYPOw7CGDfxiWHmg/edit?ui=eyJEIjp7IkoiOnsiQiI6eyJBPyI6IkIifX19LCJBIjp7IkEiOiJkb3dubG9hZF9wbmciLCJGIjp0cnVlfSwiRyI6eyJEIjp7IkQiOnsiQT8iOiJBIiwiQSI6IkIifX19fQ
