@@ -3,8 +3,17 @@ CREATE OR REPLACE TYPE tp_pessoa AS OBJECT (
     cpf VARCHAR2(11),
     nome VARCHAR2(50),
     sexo VARCHAR2(1),
-    idade INT
+    idade INT,
+    FINAL MEMBER PROCEDURE setName (new_nome VARCHAR2)
 ) NOT FINAL NOT INSTANTIABLE; 
+/
+
+CREATE OR REPLACE TYPE BODY tp_pessoa IS
+  FINAL MEMBER PROCEDURE setName (new_nome VARCHAR2) IS
+  BEGIN
+    SELF.nome := new_nome;  
+  END;
+END;
 /
 
 CREATE OR REPLACE TYPE tp_animal AS OBJECT (
@@ -32,7 +41,7 @@ CREATE OR REPLACE TYPE tp_atribuicoes AS OBJECT(
     habitat REF tp_habitat
 );
 /
-
+    
 CREATE OR REPLACE TYPE tp_nt_atribuicoes AS TABLE OF tp_atribuicoes;
 /
 
@@ -79,9 +88,18 @@ CREATE OR REPLACE TYPE tp_review AS OBJECT (
 
 CREATE OR REPLACE TYPE tp_data_exibicao as OBJECT(
   data_inicio DATE,
-  data_fim DATE
+  data_fim DATE,
+  MEMBER FUNCTION getDuration return NUMBER
 );
 /
+    
+CREATE OR REPLACE TYPE BODY tp_data_exibicao IS
+    MEMBER FUNCTION getDuration RETURN NUMBER IS
+    BEGIN
+        RETURN data_inicio - data_fim;
+    END;
+END;
+/    
 
 CREATE OR REPLACE TYPE tp_exibicao AS OBJECT (
     id NUMBER,
@@ -95,7 +113,7 @@ CREATE OR REPLACE TYPE tp_exibicao AS OBJECT (
 -- #TABLES
 CREATE TABLE tb_funcionario OF tp_funcionario(
     cpf PRIMARY KEY,
-    gerente WITH ROWID REFERENCES tb_funcionario
+    gerente SCOPE IS tb_funcionario
 ) NESTED TABLE atribuicoes STORE AS tb_atribuicoes;
 /
 
@@ -133,38 +151,36 @@ CREATE TABLE tb_review OF tp_review(
 );
 /
 
--- #EXEMPLOS:
-INSERT INTO tb_animal (id, nome, especie, nascimento, sexo, origem, descrico)
-VALUES (1,'Simba', 'Leão', TO_DATE('2003-03-28', 'YYYY-MM-DD'), 'M', 'Tanzania', 'Grande felino de pelagem dourada e uma juba espessa.');
+-- #Testes de funções
+-- Teste setName
+DECLARE
+  funcionario tp_funcionario := tp_funcionario(
+    cpf => '12345678901', 
+    nome => 'João Silva', 
+    sexo => 'M', 
+    idade => 30,
+    gerente => NULL,  
+    cargo => 'Analista',
+    data_contratacao => SYSDATE,
+    email => 'joao.silva@example.com',
+    fone => '1234567890',
+    salario => 3000.00,
+    atribuicoes => tp_nt_atribuicoes() 
+  );
+
+BEGIN
+  DBMS_OUTPUT.PUT_LINE('Nome atual: ' || funcionario.nome);
+  funcionario.setName('Carlos Pereira');
+  DBMS_OUTPUT.PUT_LINE('Nome atualizado: ' || funcionario.nome);
+END;
 /
 
-INSERT INTO tb_habitat(id, tipo, localizacao, nome, descricao)
-VALUES (1, 'Semi-desertico', 'Sul', 'Savana', 'Habitat legal');
-/
-
-INSERT INTO tb_funcionario (cpf, nome, sexo, idade, cargo, data_contratacao, email, fone, salario)
-VALUES ('98765432100', 'Qinqyi', 'F', 375, 'Policial gerente', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com', '5551999887766', 1000.000);
-/
-    
-INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fone, salario, atribuicoes)
-VALUES ('12345678901', 'Jane Doe', 'F', 29, (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '98765432100'), 'Policial infiltrado', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com', '5551999887766', 5500.000, 
-tp_nt_atribuicoes(tp_atribuicoes((SELECT REF(A) FROM tb_animal A WHERE A.id = '1'), (SELECT REF(H) from tb_habitat H WHERE H.id = '1'))));
-/
-
-INSERT INTO tb_visitante (cpf, nome, sexo, idade, data_vsitas, email, fone)
-VALUES ('12345678901', 'Jane Doe', 'F', 29, tp_nt_data_visitas(tp_data_visitas(TO_DATE('2003-03-28', 'YYYY-MM-DD'))), 'ex@john.doe', '5551999887766');
-/
-
-INSERT INTO tb_exibicao (id, nome, descricao, data_exib, habitat)
-VALUES ('1', 'NOME EXIB', 'DESCRICAO', tp_data_exibicao(TO_DATE('2001-03-28', 'YYYY-MM-DD'), TO_DATE('2001-03-28', 'YYYY-MM-DD')), '1');
-/
-
-INSERT INTO tb_visita (visitante, habitat, data_visita)
-VALUES ('12345678901', '1', TO_DATE('2001-03-28', 'YYYY-MM-DD'));
-/
-
-INSERT INTO tb_review (id, nota, visita)
-VALUES (1, 9, (SELECT REF(V) FROM tb_visita V WHERE V.visitante = '12345678901' AND V.habitat = '1' AND V.data_visita = TO_DATE('2003-03-28', 'YYYY-MM-DD')));
-/
+-- Teste getDuration
+SELECT 
+    e.id, 
+    e.nome, 
+    e.data_exib.getDuration() AS duracao_dias 
+FROM 
+    tb_exibicao e;
 
 --CHECKLIST: https://www.canva.com/design/DAGQfZ2PP0M/jqMwQeHYPOw7CGDfxiWHmg/edit?ui=eyJEIjp7IkoiOnsiQiI6eyJBPyI6IkIifX19LCJBIjp7IkEiOiJkb3dubG9hZF9wbmciLCJGIjp0cnVlfSwiRyI6eyJEIjp7IkQiOnsiQT8iOiJBIiwiQSI6IkIifX19fQ
