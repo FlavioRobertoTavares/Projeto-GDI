@@ -51,37 +51,102 @@ VALUES (6, 'Vila', 'Leste','Ninja','Habitat com caracteristicas semelhantes a vi
 
 -- FUNCIONARIOS
 
-INSERT INTO tb_funcionario (cpf, nome, sexo, idade, cargo, data_contratacao, email, fone, salario)
-VALUES ('98765432100', 'Qinqyi', 'F', 375, 'Gerente Geral', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com', '5551999887766', 1000.000);
+INSERT INTO tb_funcionario (cpf, nome, sexo, idade, cargo, data_contratacao, email, fones, salario)
+VALUES ('98765432100', 'Qinqyi', 'F', 375, 'Gerente Geral', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com', tp_fones('5551999887766'), 1000.000);
 /
 
-INSERT INTO tb_funcionario (cpf, nome, sexo, idade, cargo, data_contratacao, email, fone, salario)
-VALUES ('01111111111', 'Carlos Henrique', 'M', 20,'Gerente Geral', TO_DATE('2020-09-28', 'YYYY-MM-DD'), 'chvmv@cin.ufpe.br', '5581992005097', 15000.000);
+INSERT INTO tb_funcionario (cpf, nome, sexo, idade, cargo, data_contratacao, email, fones, salario)
+VALUES ('01111111111', 'Carlos Henrique', 'M', 20, 'Gerente Geral', TO_DATE('2020-09-28', 'YYYY-MM-DD'), 'chvmv@cin.ufpe.br', tp_fones('5581992005097', '5581992005098'), 15000.000);
 /
 
-INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fone, salario, atribuicoes)
-VALUES ('12345678901', 'Jane Doe', 'F', 29, (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '98765432100'), 'Cuidador', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com', '5551999887766', 5500.000,
-tp_nt_atribuicoes(tp_atribuicoes((SELECT REF(A) FROM tb_animal A WHERE A.id = '1'), (SELECT REF(H) from tb_habitat H WHERE H.id = '1'))));
+INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fones, salario, atribuicoes)
+VALUES (
+    '12345678901', 'Jane Doe', 'F', 29,
+    (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '98765432100'),
+    'Cuidador', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com',
+    tp_fones('5551999887766', '5551999887767', '5551999887768'), 5500.000,
+    tp_nt_atribuicoes(
+        tp_atribuicoes(
+            (SELECT REF(A) FROM tb_animal A WHERE A.id = '1'),
+            (SELECT REF(H) FROM tb_habitat H WHERE H.id = '1')
+        )
+    )
+);
 /
 
-INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fone, salario, atribuicoes)
-VALUES ('02222222222', 'Flávio Roberto', 'M', 21, (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '01111111111'), 'Cuidador', TO_DATE('2021-05-04', 'YYYY-MM-DD'), 'frtb@cin.ufpe.br', '5581922222222', 7500.000, tp_nt_atribuicoes(tp_atribuicoes((SELECT REF(A) FROM tb_animal A WHERE A.id = '2'), (SELECT REF(H) from tb_habitat H WHERE H.id = '2'))));
+INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fones, salario, atribuicoes)
+VALUES (
+    '02222222222', 'Flávio Roberto', 'M', 21,
+    (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '01111111111'),
+    'Cuidador', TO_DATE('2021-05-04', 'YYYY-MM-DD'), 'frtb@cin.ufpe.br',
+    tp_fones('5581922222222'), 7500.000,
+    tp_nt_atribuicoes(
+        tp_atribuicoes(
+            (SELECT REF(A) FROM tb_animal A WHERE A.id = '2'),
+            (SELECT REF(H) FROM tb_habitat H WHERE H.id = '2')
+        )
+    )
+);
 /
 
-INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fone, salario, atribuicoes)
-VALUES ('03333333333', 'Vini Seabra', 'M', 20, (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '01111111111'), 'Cuidador', TO_DATE('2021-05-04', 'YYYY-MM-DD'), 'vsll@cin.ufpe.br', '5581933333333', 5000.000, tp_nt_atribuicoes(tp_atribuicoes((SELECT REF(A) FROM tb_animal A WHERE A.id = '3'), (SELECT REF(H) from tb_habitat H WHERE H.id = '3'))));
+INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fones, salario, atribuicoes)
+VALUES (
+    '03333333333', 'Vini Seabra', 'M', 20,
+    (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '01111111111'),
+    'Cuidador', TO_DATE('2021-05-04', 'YYYY-MM-DD'), 'vsll@cin.ufpe.br',
+    tp_fones('5581933333333', '5581933333334'), 5000.000,
+    tp_nt_atribuicoes(
+        tp_atribuicoes(
+            (SELECT REF(A) FROM tb_animal A WHERE A.id = '3'),
+            (SELECT REF(H) FROM tb_habitat H WHERE H.id = '3')
+        )
+    )
+);
 /
 
-INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fone, salario, atribuicoes)
-VALUES ('04444444444', 'Valeria Dias', 'F', 28, (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '01111111111'), 'Cuidador', TO_DATE('2005-07-01', 'YYYY-MM-DD'), 'vd@cin.ufpe.br', '5581944528947', 20000.000, tp_nt_atribuicoes(tp_atribuicoes((SELECT REF(A) FROM tb_animal A WHERE A.id = '4'), (SELECT REF(H) from tb_habitat H WHERE H.id = '4'))));
+INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fones, salario, atribuicoes)
+VALUES (
+    '04444444444', 'Valeria Dias', 'F', 28,
+    (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '01111111111'),
+    'Cuidador', TO_DATE('2005-07-01', 'YYYY-MM-DD'), 'vd@cin.ufpe.br',
+    tp_fones('5581944528947', '5581944528948'), 20000.000,
+    tp_nt_atribuicoes(
+        tp_atribuicoes(
+            (SELECT REF(A) FROM tb_animal A WHERE A.id = '4'),
+            (SELECT REF(H) FROM tb_habitat H WHERE H.id = '4')
+        )
+    )
+);
 /
 
-INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fone, salario, atribuicoes)
-VALUES ('05555555555', 'Carla Guedes', 'F', 55, (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '01111111111'), 'Cuidador', TO_DATE('2017-09-03', 'YYYY-MM-DD'), 'caguedes@cin.ufpe.br', '5581925545639', 5000.000, tp_nt_atribuicoes(tp_atribuicoes((SELECT REF(A) FROM tb_animal A WHERE A.id = '5'), (SELECT REF(H) from tb_habitat H WHERE H.id = '5'))));
+INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fones, salario, atribuicoes)
+VALUES (
+    '05555555555', 'Carla Guedes', 'F', 55,
+    (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '01111111111'),
+    'Cuidador', TO_DATE('2017-09-03', 'YYYY-MM-DD'), 'caguedes@cin.ufpe.br',
+    tp_fones('5581925545639'), 5000.000,
+    tp_nt_atribuicoes(
+        tp_atribuicoes(
+            (SELECT REF(A) FROM tb_animal A WHERE A.id = '5'),
+            (SELECT REF(H) FROM tb_habitat H WHERE H.id = '5')
+        )
+    )
+);
 /
 
-INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fone, salario, atribuicoes)
-VALUES ('13333333333', 'Rock Lee', 'M', 21, (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '01111111111'), 'Cuidador', TO_DATE('2019-01-04', 'YYYY-MM-DD'), 'rl@cin.ufpe.br', '5581936656749', 5000.000, tp_nt_atribuicoes(tp_atribuicoes((SELECT REF(A) FROM tb_animal A WHERE A.id = '6'), (SELECT REF(H) from tb_habitat H WHERE H.id = '6'))));
+INSERT INTO tb_funcionario (cpf, nome, sexo, idade, gerente, cargo, data_contratacao, email, fones, salario, atribuicoes)
+VALUES (
+    '13333333333', 'Rock Lee', 'M', 21,
+    (SELECT REF(F) FROM tb_funcionario F WHERE F.cpf = '01111111111'),
+    'Cuidador', TO_DATE('2019-01-04', 'YYYY-MM-DD'), 'rl@cin.ufpe.br',
+    tp_fones('5581936656749', '5581936656750', '5581936656751'), 5000.000,
+    tp_nt_atribuicoes(
+        tp_atribuicoes(
+            (SELECT REF(A) FROM tb_animal A WHERE A.id = '6'),
+            (SELECT REF(H) FROM tb_habitat H WHERE H.id = '6')
+        )
+    )
+);
 /
 
 -- VISITANTES
