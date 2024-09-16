@@ -51,6 +51,15 @@ VALUES (6, 'Vila', 'Leste','Ninja','Habitat com caracteristicas semelhantes a vi
 
 -- FUNCIONARIOS
 
+INSERT INTO tb_funcionario
+VALUES (tp_funcionario(
+    cpf => '12345678991', 
+    nome => 'João Silva', 
+    gerente => NULL,  
+    data_contratacao => TO_DATE('1945-01-15', 'YYYY-MM-DD'),
+    email => 'joao.silva@sofredor.com'
+  ));
+
 INSERT INTO tb_funcionario (cpf, nome, sexo, idade, cargo, data_contratacao, email, fones, salario)
 VALUES ('98765432100', 'Qinqyi', 'F', 375, 'Gerente Geral', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com', tp_fones('5551999887766'), 1000.000);
 /
