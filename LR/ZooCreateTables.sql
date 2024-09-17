@@ -104,7 +104,6 @@ CREATE TABLE visita (
     CONSTRAINT visita_pk PRIMARY KEY (cpf_visitante_v, id_habitat_v, data_de_visita),
     CONSTRAINT visita_cpf_fk FOREIGN KEY (cpf_visitante_v) REFERENCES visitante(cpf_visitante),
     CONSTRAINT visita_habitat_fk FOREIGN KEY (id_habitat_v) REFERENCES habitat(id)
-
 );
 
 CREATE TABLE atribuido (
