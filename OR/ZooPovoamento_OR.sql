@@ -187,7 +187,7 @@ VALUES ('1', 'O Rei Leão', 'Experiencie a imponência do Rei da Selva', tp_data
 /
 
 INSERT INTO tb_exibicao (id, nome, descricao, data_exib, habitat)
-VALUES ('2', 'Poderosa Gloria', 'Exibicao mostrando a alimentacao e dia a dia dos hipopotamos', tp_data_exibicao(TO_DATE('2012-02-28', 'YYYY-MM-DD'), TO_DATE('2001-05-28', 'YYYY-MM-DD')), 2);
+VALUES ('2', 'Poderosa Gloria', 'Exibicao mostrando a alimentacao e dia a dia dos hipopotamos', tp_data_exibicao(TO_DATE('2012-02-28', 'YYYY-MM-DD'), TO_DATE('2021-05-28', 'YYYY-MM-DD')), 2);
 /
 
 INSERT INTO tb_exibicao (id, nome, descricao, data_exib, habitat)

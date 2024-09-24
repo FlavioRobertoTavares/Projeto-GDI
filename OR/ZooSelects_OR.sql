@@ -33,3 +33,75 @@ SELECT F.nome AS funcionario, DEREF(A.animal).nome AS animal, DEREF(A.habitat).n
 FROM tb_funcionario F, TABLE(F.atribuicoes) A
 WHERE F.cpf = '03333333333';
 /
+
+-- Teste da "OVERRIDING MEMBER PROCEDURE SetName" e "CONSTRUCTOR FUNCTION tp_funcionario"
+DECLARE
+  funcionario tp_funcionario := tp_funcionario(
+    cpf => '12345678901', 
+    nome => 'João Silva', 
+    gerente => NULL,  
+    data_contratacao => SYSDATE,
+    email => 'joao.silva@example.com'
+  );
+
+BEGIN
+  DBMS_OUTPUT.PUT_LINE('Nome atual: ' || funcionario.nome);
+  funcionario.setName('Carlos Pereira');
+  DBMS_OUTPUT.PUT_LINE('Nome atualizado: ' || funcionario.nome);
+END;
+/
+
+-- Teste da "FINAL ORDER MEMBER FUNCTION compareCPF"
+DECLARE
+Func1 tp_funcionario;
+Func2 tp_funcionario;
+Func3 tp_funcionario;
+is_equal1 number;
+is_equal2 number;
+
+BEGIN
+Func1 := tp_funcionario(
+    cpf => '12345678901', 
+    nome => 'João Silva', 
+    gerente => NULL,  
+    data_contratacao => SYSDATE,
+    email => 'joao.silva@example.com'
+  );
+
+
+Func2 := tp_funcionario(
+    cpf => '98765432198', 
+    nome => 'Antonio', 
+    gerente => NULL,  
+    data_contratacao => SYSDATE,
+    email => 'Aa@example.com'
+  );
+
+Func3 := tp_funcionario(
+    cpf => '12345678901', 
+    nome => 'João Silva', 
+    gerente => NULL,  
+    data_contratacao => SYSDATE,
+    email => 'joao.silva@example.com'
+  );
+
+is_equal1 := Func1.compareCPF(Func2);
+is_equal2 := Func1.compareCPF(Func3);
+
+DBMS_OUTPUT.PUT_LINE('Comparação com o Funcionario 2: ' || is_equal1 || '. comparação com o Funcionario 3: ' || is_equal2); -- prints order:1 
+ END;
+/
+
+-- Testando " MAP MEMBER FUNCTION getDuration" com e sem ORDER BY em uma consulta
+SELECT e.nome
+FROM tb_exibicao e
+ORDER BY e.data_exib.getDuration() DESC;
+/
+
+SELECT 
+    e.id, 
+    e.nome, 
+    e.data_exib.getDuration() AS duracao_dias 
+FROM 
+    tb_exibicao e;
+/
