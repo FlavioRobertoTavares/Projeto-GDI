@@ -64,7 +64,8 @@ CREATE OR REPLACE TYPE tp_funcionario UNDER tp_pessoa (
     fone VARCHAR2(13),
     salario NUMBER(8, 3),
     atribuicoes tp_nt_atribuicoes,
-    OVERRIDING MEMBER PROCEDURE SetName(new_nome VARCHAR2),
+    OVERRIDING MEMBER PROCEDURE setName(new_nome VARCHAR2),
+    MEMBER FUNCTION printFones RETURN VARCHAR2,
     CONSTRUCTOR FUNCTION tp_funcionario(
     	cpf VARCHAR2,
     	nome VARCHAR2,
@@ -80,11 +81,12 @@ CREATE OR REPLACE TYPE tp_fones AS VARRAY(3) OF VARCHAR2(13);
 
 ALTER TYPE tp_funcionario DROP ATTRIBUTE fone CASCADE;
 /
+
 ALTER TYPE tp_funcionario ADD ATTRIBUTE fones tp_fones CASCADE;
 /
 
 CREATE OR REPLACE TYPE BODY tp_funcionario IS
-  OVERRIDING MEMBER PROCEDURE setName (new_nome VARCHAR2) IS 
+  OVERRIDING MEMBER PROCEDURE setName(new_nome VARCHAR2) IS 
   BEGIN
     DBMS_OUTPUT.PUT_LINE('Nova Contratação'); 
     SELF.nome := new_nome; 
@@ -111,6 +113,16 @@ CREATE OR REPLACE TYPE BODY tp_funcionario IS
 			SELF.salario := 600.000;
         	RETURN;
 	END tp_funcionario;
+
+  MEMBER FUNCTION printFones RETURN VARCHAR2 IS
+    v_output VARCHAR2(500);
+  BEGIN
+    v_output := 'Numeros de telefones de ' || SELF.nome || ':' || CHR(10);
+    FOR i IN 1..SELF.fones.count LOOP
+      v_output := v_output || i || ' - ' || SELF.fones(i) || CHR(10);
+    END LOOP;
+    RETURN v_output;
+  END printFones;
 
 END;
 /
@@ -208,46 +220,3 @@ CREATE TABLE tb_review OF tp_review(
     visita WITH ROWID REFERENCES tb_visita
 );
 /
-
--- #Testes de funções
--- Teste setName e Constructor
-DECLARE
-  funcionario tp_funcionario := tp_funcionario(
-    cpf => '12345678901', 
-    nome => 'João Silva', 
-    gerente => NULL,  
-    data_contratacao => SYSDATE,
-    email => 'joao.silva@example.com'
-  );
-
-BEGIN
-  DBMS_OUTPUT.PUT_LINE('Nome atual: ' || funcionario.nome);
-  funcionario.setName('Carlos Pereira');
-  DBMS_OUTPUT.PUT_LINE('Nome atualizado: ' || funcionario.nome);
-END;
-/
-
--- Teste getDuration (Como ela tem MAP, podemos chamar ela para ordenar as exibições por tempo de duração!)
-INSERT INTO tb_habitat (id, tipo, localizacao, nome, descricao)
-VALUES (6, 'Vila', 'Leste','Ninja','Habitat com caracteristicas semelhantes a vila da folha');
-/
-
-INSERT INTO tb_exibicao (id, nome, descricao, data_exib, habitat)
-VALUES ('6', 'O Rei Leão', 'Experiencie a imponência do Rei da Selva', tp_data_exibicao(TO_DATE('2001-03-28', 'YYYY-MM-DD'), TO_DATE('2001-06-28', 'YYYY-MM-DD')), 6);
-/
-
-SELECT 
-    e.id, 
-    e.nome, 
-    e.data_exib.getDuration() AS duracao_dias 
-FROM 
-    tb_exibicao e;
-/
-
--- Teste alter type com varray
-INSERT INTO tb_funcionario (cpf, nome, sexo, idade, cargo, data_contratacao, email, fones, salario)
-VALUES ('98765432100', 'Qinqyi', 'F', 375, 'Gerente Geral', TO_DATE('2022-01-15', 'YYYY-MM-DD'), 'ZZZ@zenless.com', tp_fones('5551999887766', '5551963476572'), 1000.000);
-/
-
-
---CHECKLIST: https://www.canva.com/design/DAGQfZ2PP0M/jqMwQeHYPOw7CGDfxiWHmg/edit?ui=eyJEIjp7IkoiOnsiQiI6eyJBPyI6IkIifX19LCJBIjp7IkEiOiJkb3dubG9hZF9wbmciLCJGIjp0cnVlfSwiRyI6eyJEIjp7IkQiOnsiQT8iOiJBIiwiQSI6IkIifX19fQ

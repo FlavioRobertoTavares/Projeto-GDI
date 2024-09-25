@@ -10,21 +10,25 @@ FROM tb_funcionario F
 WHERE F.gerente = (SELECT REF(F1) FROM tb_funcionario F1 WHERE F1.nome = 'Qinqyi');
 /
 
--- Procedimento que printa todos os telefones da pessoa com o nome especificado:
-CREATE OR REPLACE PROCEDURE print_fones(v_nome VARCHAR2)
-IS
-    t tp_fones;
-BEGIN
-    SELECT fones INTO t FROM tb_funcionario WHERE nome = v_nome;
-    DBMS_OUTPUT.PUT_LINE('Numeros de telefones de '||v_nome||':');
-    FOR i IN 1..t.count LOOP
-        DBMS_OUTPUT.PUT_LINE(i||' - '||t(i));
-    END LOOP;
-END print_fones;
-/
+-- "Quais os telefones e cargos de cada funcionario? Mostrando cada telefone do Varray"
+SELECT f.nome,
+       f.cargo,
+       COLUMN_VALUE AS telefone
+FROM   tb_funcionario f,
+       TABLE(f.fones) t;
 
-BEGIN
-    print_fones('Carlos Henrique');
+
+-- "Qual os telefones do funcionario chamado Carlos Henrique" && teste "MEMBER FUNCTION printFones":
+DECLARE 
+    f tp_funcionario; 
+    v_output VARCHAR2(500); 
+BEGIN 
+    SELECT VALUE(f) INTO f 
+    FROM tb_funcionario f 
+    WHERE f.nome = 'Carlos Henrique'; 
+ 
+    v_output := f.printFones(); 
+    DBMS_OUTPUT.PUT_LINE(v_output); 
 END;
 /
 
